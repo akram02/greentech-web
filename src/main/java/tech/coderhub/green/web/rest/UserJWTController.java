@@ -35,9 +35,12 @@ public class UserJWTController {
 
     @PostMapping("/authenticate")
     public ResponseEntity<JWTToken> authorize(@Valid @RequestBody LoginVM loginVM) {
+        return getJwtTokenResponseEntity(loginVM);
+    }
 
+    private ResponseEntity<JWTToken> getJwtTokenResponseEntity(LoginVM loginVM) {
         UsernamePasswordAuthenticationToken authenticationToken =
-            new UsernamePasswordAuthenticationToken(loginVM.getUsername(), loginVM.getPassword());
+                new UsernamePasswordAuthenticationToken(loginVM.getUsername(), loginVM.getPassword());
 
         Authentication authentication = authenticationManagerBuilder.getObject().authenticate(authenticationToken);
         SecurityContextHolder.getContext().setAuthentication(authentication);
@@ -47,6 +50,7 @@ public class UserJWTController {
         httpHeaders.add(JWTFilter.AUTHORIZATION_HEADER, "Bearer " + jwt);
         return new ResponseEntity<>(new JWTToken(jwt), httpHeaders, HttpStatus.OK);
     }
+
     /**
      * Object to return as body in JWT Authentication.
      */

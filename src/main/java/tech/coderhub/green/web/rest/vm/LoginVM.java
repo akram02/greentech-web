@@ -18,6 +18,15 @@ public class LoginVM {
 
     private Boolean rememberMe;
 
+    public LoginVM() {
+    }
+
+    public LoginVM(@NotNull @Size(min = 1, max = 50) String username, @NotNull @Size(min = 4, max = 100) String password, Boolean rememberMe) {
+        this.username = username;
+        this.password = password;
+        this.rememberMe = rememberMe;
+    }
+
     public String getUsername() {
         return username;
     }

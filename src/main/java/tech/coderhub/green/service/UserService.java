@@ -19,6 +19,7 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import tech.coderhub.green.web.rest.MobileRegisterVM;
 
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
@@ -115,6 +116,29 @@ public class UserService {
         userRepository.save(newUser);
         log.debug("Created Information for User: {}", newUser);
         return newUser;
+    }
+
+    public void registerUserForMobile(MobileRegisterVM userVM) {
+        userRepository.findOneByLogin(userVM.getUsername()).ifPresent(existingUser -> {
+            boolean removed = removeNonActivatedUser(existingUser);
+            if (!removed) {
+                throw new UsernameAlreadyUsedException();
+            }
+        });
+        User newUser = new User();
+        String encryptedPassword = passwordEncoder.encode(userVM.getPassword());
+        newUser.setLogin(userVM.getUsername());
+        newUser.setFirstName(userVM.getFirstName());
+        newUser.setLastName(userVM.getLastName());
+        // new user gets initially a generated password
+        newUser.setPassword(encryptedPassword);
+        // new user is not active
+        newUser.setActivated(true);
+        // new user gets registration key
+        Set<Authority> authorities = new HashSet<>();
+        authorityRepository.findById(AuthoritiesConstants.USER).ifPresent(authorities::add);
+        newUser.setAuthorities(authorities);
+        userRepository.save(newUser);
     }
 
     private boolean removeNonActivatedUser(User existingUser) {
