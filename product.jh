@@ -1,0 +1,6 @@
+entity Product {
+  userId Long
+  name String,
+  location String,
+  category String,
+}
