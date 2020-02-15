@@ -1,0 +1,39 @@
+{
+  "generator-jhipster": {
+    "promptValues": {
+      "packageName": "tech.coderhub.green"
+    },
+    "jhipsterVersion": "6.7.0",
+    "applicationType": "monolith",
+    "baseName": "greentech",
+    "packageName": "tech.coderhub.green",
+    "packageFolder": "tech/coderhub/green",
+    "serverPort": "8080",
+    "authenticationType": "jwt",
+    "cacheProvider": "no",
+    "websocket": false,
+    "databaseType": "sql",
+    "devDatabaseType": "h2Disk",
+    "prodDatabaseType": "mysql",
+    "searchEngine": false,
+    "messageBroker": false,
+    "serviceDiscoveryType": false,
+    "buildTool": "gradle",
+    "enableSwaggerCodegen": false,
+    "jwtSecretKey": "OTg4OWEyNzZlZDRjZDZlODYwZDZmYTI4ZjRmZjAxMThjNDYxYzQ1OGI5ZDVhMGM2YzcwMjZlYjU4OTA0YjFiMjYyYzc4NDEwZGZjYmZlM2JmNmRmYjc4NjVlMGI2Nzc4MzY5MWUzMmNkYjY4YjcwNWVhNWM2NWNiMWIxZTU1YWU=",
+    "embeddableLaunchScript": false,
+    "useSass": true,
+    "clientPackageManager": "npm",
+    "clientFramework": "angularX",
+    "clientTheme": "none",
+    "clientThemeVariant": "",
+    "creationTimestamp": 1581741582124,
+    "testFrameworks": [],
+    "jhiPrefix": "jhi",
+    "entitySuffix": "",
+    "dtoSuffix": "DTO",
+    "otherModules": [],
+    "enableTranslation": false,
+    "blueprints": []
+  }
+}
