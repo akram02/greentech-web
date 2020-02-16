@@ -46,13 +46,6 @@ public class ProductResource {
         this.userRepository = userRepository;
     }
 
-    /**
-     * {@code POST  /products} : Create a new product.
-     *
-     * @param product the product to create.
-     * @return the {@link ResponseEntity} with status {@code 201 (Created)} and with body the new product, or with status {@code 400 (Bad Request)} if the product has already an ID.
-     * @throws URISyntaxException if the Location URI syntax is incorrect.
-     */
     @PostMapping("/products")
     public ResponseEntity<Product> createProduct(@RequestBody Product product) throws URISyntaxException {
         log.debug("REST request to save Product : {}", product);
@@ -65,15 +58,6 @@ public class ProductResource {
             .body(result);
     }
 
-    /**
-     * {@code PUT  /products} : Updates an existing product.
-     *
-     * @param product the product to update.
-     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the updated product,
-     * or with status {@code 400 (Bad Request)} if the product is not valid,
-     * or with status {@code 500 (Internal Server Error)} if the product couldn't be updated.
-     * @throws URISyntaxException if the Location URI syntax is incorrect.
-     */
     @PutMapping("/products")
     public ResponseEntity<Product> updateProduct(@RequestBody Product product) throws URISyntaxException {
         log.debug("REST request to update Product : {}", product);
@@ -86,11 +70,6 @@ public class ProductResource {
             .body(result);
     }
 
-    /**
-     * {@code GET  /products} : get all the products.
-     *
-     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of products in body.
-     */
     @GetMapping("/products")
     public List<ProductDTO> getAllProducts() {
         log.debug("REST request to get all Products");
@@ -105,12 +84,21 @@ public class ProductResource {
         return products;
     }
 
-    /**
-     * {@code GET  /products/:id} : get the "id" product.
-     *
-     * @param id the id of the product to retrieve.
-     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the product, or with status {@code 404 (Not Found)}.
-     */
+    @GetMapping("/products-for-mobile-by-category/{category}")
+    public List<ProductDTO> getAllProductsByCategory(@PathVariable String category) {
+        log.debug("REST request to get all Products By Category");
+        List<ProductDTO> products = new ArrayList<>();
+        List<Product> lists = productRepository.findByCategory(category);
+        for (Product product : lists) {
+            userRepository.findOneWithAuthoritiesById(product.getUserId())
+                    .ifPresent(user ->
+                            products.add(new ProductDTO(product.getId(), product.getName(), user.getFirstName() + " " + user.getLastName(), product.getLocation(), product.getCategory()))
+                    );
+        }
+        return products;
+    }
+
+
     @GetMapping("/products/{id}")
     public ResponseEntity<Product> getProduct(@PathVariable Long id) {
         log.debug("REST request to get Product : {}", id);
@@ -130,12 +118,6 @@ public class ProductResource {
         return ResponseUtil.wrapOrNotFound(Optional.of(productDTO[0]));
     }
 
-    /**
-     * {@code DELETE  /products/:id} : delete the "id" product.
-     *
-     * @param id the id of the product to delete.
-     * @return the {@link ResponseEntity} with status {@code 204 (NO_CONTENT)}.
-     */
     @DeleteMapping("/products/{id}")
     public ResponseEntity<Void> deleteProduct(@PathVariable Long id) {
         log.debug("REST request to delete Product : {}", id);
