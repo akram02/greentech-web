@@ -118,6 +118,18 @@ public class ProductResource {
         return ResponseUtil.wrapOrNotFound(product);
     }
 
+    @GetMapping("/products-for-mobile/{id}")
+    public ResponseEntity<ProductDTO> getProductForMobile(@PathVariable Long id) {
+        log.debug("REST request to get Product : {}", id);
+        Product product = productRepository.findById(id).get();
+        final ProductDTO[] productDTO = {new ProductDTO()};
+        userRepository.findOneWithAuthoritiesById(product.getUserId())
+                .ifPresent(user ->
+                        productDTO[0] = new ProductDTO(product.getId(), product.getName(), user.getFirstName() + " " + user.getLastName(), product.getLocation(), product.getCategory())
+                );
+        return ResponseUtil.wrapOrNotFound(Optional.of(productDTO[0]));
+    }
+
     /**
      * {@code DELETE  /products/:id} : delete the "id" product.
      *

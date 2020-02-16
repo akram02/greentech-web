@@ -1,0 +1,7 @@
+entity Order {
+  productId Long
+  consumerId Long
+  sellerId Long
+  description String
+  status String
+}

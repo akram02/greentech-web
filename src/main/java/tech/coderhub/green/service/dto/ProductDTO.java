@@ -15,6 +15,10 @@ public class ProductDTO {
         this.category = category;
     }
 
+    public ProductDTO() {
+
+    }
+
     public Long getId() {
         return id;
     }
